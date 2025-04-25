@@ -7,9 +7,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
+			display: flex;
+			background-color: #262626;
         }
         .input-group {
             margin-bottom: 10px;
@@ -22,7 +24,10 @@
             padding: 8px;
             width: 70px;
         }
-        button {
+		.button {
+			transition-duration: 0.4s;
+		}
+        .button1 {
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
@@ -30,8 +35,19 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        button:hover {
+        .button1:hover {
             background-color: #5000FF;
+        }
+		.button2 {
+            padding: 10px 20px;
+            background-color: #840000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+		}
+		.button2:hover {
+            background-color: #FF5050;
         }
         #result {
             margin-top: 20px;
@@ -41,52 +57,67 @@
     </style>
 </head>
 <body>
-    <h1>HSR Effect Hit Rate Calculator</h1>
-    
-    <div class="input-group">
-        <label for="input1">Base Chance:</label>
-        <input type="number" id="input1" step="any" placeholder="100" oninput="calculate()">
-		<label>%</label>
-    </div>
-    
-    <div class="input-group">
-        <label for="input2">Effect Hit Rate:</label>
-        <input type="number" id="input2" step="any" placeholder="100" oninput="calculate()">
-		<label>%</label>
-    </div>
-    
-    <div class="input-group">
-        <label for="input3">Enemy Effect Res:</label>
-        <input type="number" id="input3" step="any" placeholder="40" oninput="calculate()">
-		<label>%</label>
-    </div>
-    
-    <div class="input-group">
-        <label for="input4">Enemy Debuff Res:</label>
-        <input type="number" id="input4" step="any" placeholder="0" oninput="calculate()">
-		<label>%</label>
-    </div>
-    
-    <button onclick="calculate()">Calculate</button>
-    
-    <div id="result"></div>
+
+	<div>
+	
+		<h1>HSR Effect Hit Rate Calculator</h1>
+		
+		<div class="input-group">
+			<label for="input1">Base Chance:</label>
+			<input type="number" id="input1" step="any" placeholder="100" oninput="calculate()">
+			<label>%</label>
+		</div>
+		
+		<div class="input-group">
+			<label for="input2">Effect Hit Rate:</label>
+			<input type="number" id="input2" step="any" placeholder="100" oninput="calculate()">
+			<label>%</label>
+		</div>
+		
+		<div class="input-group">
+			<label for="input3">Enemy Effect Res:</label>
+			<input type="number" id="input3" step="any" placeholder="40" oninput="calculate()">
+			<label>%</label>
+		</div>
+		
+		<div class="input-group">
+			<label for="input4">Enemy Debuff Res:</label>
+			<input type="number" id="input4" step="any" placeholder="0" oninput="calculate()">
+			<label>%</label>
+		</div>
+		
+		<button class="button button1"onclick="calculate()">Calculate</button>
+		<button class="button button2" onclick="reset()">Reset</button>
+		
+		<div id="result">Chance to Apply: ?%</div>
+	
+	</div>
     
     <script>
+	
+		const input1Element = document.getElementById('input1');
+		const input2Element = document.getElementById('input2');
+		const input3Element = document.getElementById('input3');
+		const input4Element = document.getElementById('input4');
+	
+		function reset() {
+			input1Element.value = '';
+			input2Element.value = '';
+			input3Element.value = '';
+			input4Element.value = '';
+			document.getElementById('result').textContent = 'Chance to Apply: ?%';
+            return;
+		}
+		
         function calculate() {
 		
-			const input1Element = document.getElementById('input1');
-			const input2Element = document.getElementById('input2');
-			const input3Element = document.getElementById('input3');
-			const input4Element = document.getElementById('input4');
-		
-            // Get input values
             let input1 = parseFloat(input1Element.value);
             let input2 = parseFloat(input2Element.value);
 			let input3 = parseFloat(input3Element.value);
 			let input4 = parseFloat(input4Element.value);
 			
 			if (isNaN(input1) && isNaN(input2) && isNaN(input3) && isNaN(input4)) {
-				document.getElementById('result').textContent = '';
+				document.getElementById('result').textContent = 'Chance to Apply: ?%';
                 return;
             }
 			
@@ -106,16 +137,13 @@
                 input4 = parseFloat(input4Element.placeholder);
             }
             
-            // Convert percentage inputs to decimals (e.g., 5% becomes 0.05)
             const baseChance = input1 / 100;
             const effectHitRate = input2 / 100;
             const enemyEffectRes = input3 / 100;
             const enemyDebuffRes = input4 / 100;
             
-            // Perform the calculation
             const result = (baseChance * (1 + effectHitRate) * (1 - enemyEffectRes) * (1 - enemyDebuffRes)) * 100;
             
-            // Display the result
             document.getElementById('result').textContent = `Chance to Apply: ${result.toFixed(2)}` + '%';
         }
     </script>
