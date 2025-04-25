@@ -10,11 +10,12 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-			display: flex;
-			background-color: #dbdbdb;
+			display: center;
+			background-color: #202020;
         }
-        .input-group {
+        input-group {
             margin-bottom: 10px;
+			color: white;
         }
         label {
             display: inline-block;
@@ -25,7 +26,8 @@
             width: 70px;
         }
 		.button {
-			transition-duration: 0.4s;
+			transition-duration: 0.33s;
+			border-radius: 5px;
 		}
         .button1 {
             padding: 10px 20px;
@@ -34,9 +36,11 @@
             border: none;
             cursor: pointer;
             margin-top: 10px;
+			border: 2px solid green;
         }
         .button1:hover {
             background-color: #5000FF;
+			border: 2px solid #c300ff;
         }
 		.button2 {
             padding: 10px 20px;
@@ -45,14 +49,24 @@
             border: none;
             cursor: pointer;
             margin-top: 10px;
+			border: 2px solid red;
 		}
 		.button2:hover {
             background-color: #FF5050;
+			border: 2px solid #a30000;
         }
-        #result {
+        .result {
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
+			color: white;
+        }
+		.extra {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+			color: white;
+			display: inline-block;
         }
     </style>
 </head>
@@ -60,7 +74,7 @@
 
 	<div>
 	
-		<h1>HSR Effect Hit Rate Calculator</h1>
+		<h1 style="color: white;">HSR Effect Hit Rate Calculator</h1>
 		
 		<div class="input-group">
 			<label for="input1">Base Chance:</label>
@@ -86,10 +100,17 @@
 			<label>%</label>
 		</div>
 		
-		<button class="button button1"onclick="calculate()">Calculate</button>
+		<button class="button button1" onclick="calculate()">Calculate</button>
 		<button class="button button2" onclick="reset()">Reset</button>
 		
-		<div id="result">Chance to Apply: ?%</div>
+		<div class="result" id="result">Chance to Apply: ?%</div>
+		
+		<hr id="linebreak" style="display: none;"></hr>
+		
+		<div class="extra" id="extra0"></div>
+		<div class="extra" id="extra1"></div>
+		<div class="extra" id="extra2"></div>
+		<div class="extra" id="extra3"></div>
 	
 	</div>
     
@@ -106,6 +127,11 @@
 			input3Element.value = '';
 			input4Element.value = '';
 			document.getElementById('result').textContent = 'Chance to Apply: ?%';
+			document.getElementById('extra0').textContent = '';
+			document.getElementById('extra1').textContent = '';
+			document.getElementById('extra2').textContent = '';
+			document.getElementById('extra3').textContent = '';
+			document.getElementById('linebreak').style.display = "none";
             return;
 		}
 		
@@ -117,7 +143,7 @@
 			let input4 = parseFloat(input4Element.value);
 			
 			if (isNaN(input1) && isNaN(input2) && isNaN(input3) && isNaN(input4)) {
-				document.getElementById('result').textContent = 'Chance to Apply: ?%';
+				reset();
                 return;
             }
 			
@@ -144,7 +170,28 @@
             
             const result = (baseChance * (1 + effectHitRate) * (1 - enemyEffectRes) * (1 - enemyDebuffRes)) * 100;
             
-            document.getElementById('result').textContent = `Chance to Apply: ${result.toFixed(2)}` + '%';
+			let chance = result.toFixed(2);
+            document.getElementById('result').textContent = 'Chance to Apply: ' + chance + '%';
+			
+			if (chance < 100) {
+				const ehr = (baseChance * 1 * (1 - enemyEffectRes) * (1 - enemyDebuffRes));
+				const a = (1 / ehr) - 1;
+				const b = (0.9 / ehr) - 1;
+				const c = (0.8 / ehr) - 1;
+				const d = (0.7 / ehr) - 1;
+				document.getElementById('extra0').textContent = 'EHR Needed to reach 100%: ' + a * 100;
+				document.getElementById('extra1').textContent = 'EHR Needed to reach 90%: ' + b * 100;
+				document.getElementById('extra2').textContent = 'EHR Needed to reach 80%: ' + c * 100;
+				document.getElementById('extra3').textContent = 'EHR Needed to reach 70%: ' + d * 100;
+				document.getElementById('linebreak').style.display = "flex";
+				
+			} else {
+				document.getElementById('extra0').textContent = '';
+				document.getElementById('extra1').textContent = '';
+				document.getElementById('extra2').textContent = '';
+				document.getElementById('extra3').textContent = '';
+				document.getElementById('linebreak').style.display = "none";
+			}
         }
     </script>
 </body>
