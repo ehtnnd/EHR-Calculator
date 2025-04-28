@@ -173,10 +173,14 @@
 				document.getElementById('result').textContent = 'Chance to Apply: ' + result.toFixed(2) + '%';
 				
 				const ehr = (baseChance * 1 * (1 - enemyEffectRes) * (1 - enemyDebuffRes));
-				const a = (1 / ehr) - 1;
-				const b = (0.9 / ehr) - 1;
-				const c = (0.8 / ehr) - 1;
-				const d = (0.7 / ehr) - 1;
+				let a = (1 / ehr) - 1;
+				let b = (0.9 / ehr) - 1;
+				let c = (0.8 / ehr) - 1;
+				let d = (0.7 / ehr) - 1;
+				if (a < 0) a = 0;
+				if (b < 0) b = 0;
+				if (c < 0) c = 0;
+				if (d < 0) d = 0;
 				document.getElementById('extra0').textContent = 'Effect Hit Rate Needed to reach 100%: ' + (a * 100).toFixed(2) + '%';
 				document.getElementById('extra1').textContent = 'Effect Hit Rate Needed to reach 90%: ' + (b * 100).toFixed(2) + '%';
 				document.getElementById('extra2').textContent = 'Effect Hit Rate Needed to reach 80%: ' + (c * 100).toFixed(2) + '%';
